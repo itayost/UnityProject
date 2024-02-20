@@ -8,10 +8,12 @@ public class PlayerBehaviour : MonoBehaviour
     CharacterController controller;
     float speed = 4;
     float angularSpeed = 50;
+    AudioSource footStepSnd;
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>(); // connects controller to player's controller
+        footStepSnd = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -38,5 +40,12 @@ public class PlayerBehaviour : MonoBehaviour
         motion = transform.TransformDirection(motion); // transforms local coordinates to global coordinates
 
         controller.Move(motion); // in global coordinates
+        if(dx != 0 || dz != 0)
+        {
+            if(!footStepSnd.isPlaying)
+            {
+                footStepSnd.Play();
+            }
+        }
     }
 }
