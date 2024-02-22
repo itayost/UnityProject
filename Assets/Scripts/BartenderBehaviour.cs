@@ -17,7 +17,7 @@ public class BartenderBehaviour : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if(distance < 4)
+        if(distance < 5)
         {
             // rotate the npc towards the player
             Vector3 target_dir = player.transform.position - transform.position;
