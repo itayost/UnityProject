@@ -22,12 +22,12 @@ public class CarGateMotion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         animator.SetBool("IsOpen", true);
-        sound.Play();
+        sound.PlayDelayed(0.8f);
     }
 
     private void OnTriggerExit(Collider other)
     {
         animator.SetBool("IsOpen", false);
-        sound.Play();
+        sound.PlayDelayed(0.8f);
     }
 }
