@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7691139564961646441}
   - component: {fileID: 3804881281686433267}
   - component: {fileID: 6963289784958498276}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4843823420548424326}
   - component: {fileID: 9102318491478192824}
   - component: {fileID: 6671837681024419133}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: IntExt_apt_DoorFrame_02_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 4105894247786488492}
   - component: {fileID: 1952238471096811736}
   - component: {fileID: 7572028095513314791}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Glass.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
