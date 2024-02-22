@@ -17,13 +17,19 @@ public class BartenderBehaviour : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if(distance < 5)
+        if(distance < 4)
         {
-            animator.SetInteger("State", 1);
+            // rotate the npc towards the player
+            Vector3 target_dir = player.transform.position - transform.position;
+            target_dir.y = 0; // stay in x-z plane
+            Vector3 temp_dir = Vector3.RotateTowards(transform.forward, target_dir, Time.deltaTime, 0);
+            transform.rotation = Quaternion.LookRotation(temp_dir);
+            animator.SetInteger("State", 1); // start talking
+
         }
         else
         {
-            animator.SetInteger("State", 0);
+            animator.SetInteger("State", 0); // stop talking
         }
     }
 }
