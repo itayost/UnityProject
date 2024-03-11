@@ -35,4 +35,8 @@ public class KeyBehaviour : MonoBehaviour
             sound.Play();
         }
     }
+
+    public static int getNumOfKeys(){
+        return numKeys;
+    }
 }
