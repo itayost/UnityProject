@@ -8,10 +8,16 @@ public class DrawerMotion : MonoBehaviour
     Animator animator;
     public GameObject player;
     public Text popText;
+    AudioSource sound;
+    bool inCollider = false;
+    public bool hasKey;
+    public GameObject keys;
+    public Text keysText;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        sound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -22,42 +28,25 @@ public class DrawerMotion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        /*if (other.gameObject == player.gameObject)
+        if (other.gameObject == player.gameObject)
         {
-            if(!animator.GetBool("isOpen"))
-            {
-                popText.text = "Press 'O' to open the Drawer";
-                popText.enabled = true;
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    popText.text = "O pressed";
-                    animator.SetBool("isOpen", true);
-                }
-            }
-            else
-            {
-                popText.text = "Press 'C' to close the Drawer";
-                popText.enabled = true;
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    animator.SetBool("isOpen", false);
-                }
-            }
-        }*/
-        StartCoroutine(WaitForPlayerInput());
+            inCollider = true;
+            StartCoroutine(WaitForPlayerInput());
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == player.gameObject)
         {
+            inCollider = false;
             popText.enabled = false;
         }
     }
 
     private IEnumerator WaitForPlayerInput()
     {
-        while (true)
+        while (inCollider)
         {
             if (!animator.GetBool("isOpen"))
             {
@@ -66,8 +55,16 @@ public class DrawerMotion : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.O))
                 {
-                    popText.text = "O pressed";
                     animator.SetBool("isOpen", true);
+                    if(hasKey)
+                    {
+                        sound = keys.GetComponent<AudioSource>();
+                        popText.text = "A key has found!";
+                        KeyBehaviour.setNumOfKeys(KeyBehaviour.getNumOfKeys() + 1);
+                        keysText.text = "Keys: " + KeyBehaviour.getNumOfKeys();
+                        hasKey = false;
+                    }
+                    sound.PlayDelayed(0.5f);
                     break;
                 }
             }
@@ -79,6 +76,7 @@ public class DrawerMotion : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.C))
                 {
                     animator.SetBool("isOpen", false);
+                    sound.PlayDelayed(0.5f);
                     break;
                 }
             }

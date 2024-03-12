@@ -39,4 +39,8 @@ public class KeyBehaviour : MonoBehaviour
     public static int getNumOfKeys(){
         return numKeys;
     }
+
+    public static void setNumOfKeys(int newNum){
+        numKeys = newNum;
+    }
 }
