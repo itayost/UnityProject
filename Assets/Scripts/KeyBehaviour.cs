@@ -14,7 +14,7 @@ public class KeyBehaviour : MonoBehaviour
     void Start()
     {
         if(!exists)
-            gameObject.SetActive(false);
+            gameObject.SetActive(false); // checks if key is visible.
     }
 
     // Update is called once per frame
