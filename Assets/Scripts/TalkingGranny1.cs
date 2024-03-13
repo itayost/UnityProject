@@ -11,7 +11,8 @@ public class TalkingGranny1 : MonoBehaviour
     public GameObject talkBackground;
     RawImage background;
     int ansCount = 0;
-    
+    bool isQuestioning = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,7 @@ public class TalkingGranny1 : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if(distance < 3)
+        if (distance < 2)
         {
             // rotate the npc towards the player
             Vector3 target_dir = player.transform.position - transform.position;
@@ -32,88 +33,117 @@ public class TalkingGranny1 : MonoBehaviour
             Vector3 temp_dir = Vector3.RotateTowards(transform.forward, target_dir, Time.deltaTime, 0);
             transform.rotation = Quaternion.LookRotation(temp_dir);
             animator.SetBool("isTalking", true); // start talking
-            StartQuestions();
+            if (!isQuestioning)
+            {
+                isQuestioning = true;
+                StartQuestions();
+            }
         }
         else
         {
             animator.SetBool("isTalking", false); // stop talking
+            isQuestioning = false;
             EndQuestions();
         }
     }
 
-    private void StartQuestions(){
+    private void StartQuestions()
+    {
         background.enabled = true;
         talkText.enabled = true;
 
         StartCoroutine(AskQuestions());
     }
 
-    private void EndQuestions(){
+    private void EndQuestions()
+    {
+        StopCoroutine(AskQuestions());
         background.enabled = false;
         talkText.enabled = false;
     }
 
- private IEnumerator AskQuestions()
-{
-    while (ansCount < 3)
+    private IEnumerator AskQuestions()
     {
-        talkText.text = "Hello World!";
-
-        if (ansCount == 0)
+        talkText.text = "Answer 3 questions to get your key:";
+        yield return new WaitForSeconds(2f);
+        while (ansCount < 2)
         {
-            talkText.text = "Is Victor the best lecturer in Afeka? Y/N";
-            yield return StartCoroutine(GetAnswer(answer =>
+            switch (ansCount)
             {
-                if (answer)
-                {
-                    // Player answered "Yes"
-                    talkText.text = "Correct";
-                    Debug.Log("Player thinks Victor is the best lecturer!");
-                    StartCoroutine(WaitAndContinue(1f));
-                    ansCount++;
-                }
-                else
-                {
-                    // Player answered "No"
-                    talkText.text = "Wrong";
-                    Debug.Log("Player doesn't think Victor is the best lecturer.");
-                    StartCoroutine(WaitAndContinue(1f));
-                }
+                case 0:
+                    talkText.text = "Question number 1:";
+                    yield return new WaitForSeconds(2f);
+                    talkText.text = "Is Victor the best lecturer in Afeka? Y/N";
+                    yield return StartCoroutine(GetAnswer(answer =>
+                    {
+                        if (answer)
+                        {
+                            // Player answered "Yes"
+                            talkText.text = "Correct";
+                            ansCount++;
+                        }
+                        else
+                        {
+                            // Player answered "No"
+                            talkText.text = "Wrong";
+                        }
+                    }));
+                    yield return new WaitForSeconds(2f);
+                    break;
 
-                ansCount++;
-            }));
+                case 1:
+                    talkText.text = "Question number 2:";
+                    yield return new WaitForSeconds(2f);
+                    talkText.text = "Is Yarin the best Student in Afeka? Y/N";
+                    yield return StartCoroutine(GetAnswer(answer =>
+                    {
+                        if (answer)
+                        {
+                            // Player answered "Yes"
+                            talkText.text = "Correct";
+                            ansCount++;
+                        }
+                        else
+                        {
+                            // Player answered "No"
+                            talkText.text = "Wrong";
+                        }
+                    }));
+                    yield return new WaitForSeconds(2f);
+                    break;
+            }   
         }
-
-        // Add more questions and handling logic for other values of ansCount
-
-        // Wait for a short delay before moving to the next question
-        yield return new WaitForSeconds(2f); // Adjust the delay as needed
+        if(ansCount >= 2)
+        {
+            talkText.text = "You got your key from this room! Good Luck in your journey.";
+            yield return new WaitForSeconds(2f);
+        }
     }
-}
 
-private IEnumerator GetAnswer(System.Action<bool> callback)
-{
-    bool waitingForInput = true;
-
-    while (waitingForInput)
+    private IEnumerator GetAnswer(System.Action<bool> callback)
     {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            waitingForInput = false;
-            callback(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.N))
-        {
-            waitingForInput = false;
-            callback(false);
-        }
+        bool waitingForInput = true;
 
-        yield return null;
+        while (waitingForInput)
+        {
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                waitingForInput = false;
+                callback(true);
+            }
+            else if (Input.GetKeyDown(KeyCode.N))
+            {
+                waitingForInput = false;
+                callback(false);
+            }
+
+            yield return null;
+        }
     }
-}
 
-private IEnumerator WaitAndContinue(float delay)
-{
-    yield return new WaitForSeconds(delay);
-}
+    private IEnumerator ShowMessageAndContinue(string message, float duration)
+    {
+        talkText.text = message;
+        yield return new WaitForSeconds(duration);
+    }
 }
