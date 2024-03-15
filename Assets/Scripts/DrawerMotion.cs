@@ -58,9 +58,9 @@ public class DrawerMotion : MonoBehaviour
                     animator.SetBool("isOpen", true);
                     if(hasKey)
                     {
-                        sound = keys.GetComponent<AudioSource>();
                         popText.text = "A key has found!";
                         KeyBehaviour.setNumOfKeys(KeyBehaviour.getNumOfKeys() + 1);
+                        sound = keys.GetComponent<AudioSource>();
                         keysText.text = "Keys: " + KeyBehaviour.getNumOfKeys();
                         hasKey = false;
                     }
